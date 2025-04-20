@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 from pymongo import MongoClient
+import certifi
 import matplotlib.pyplot as plt
 import seaborn as sns
 
@@ -9,12 +10,21 @@ st.set_page_config(page_title="Books Dashboard", layout="wide")
 st.title("Books to Scrape – Data Dashboard")
 
 # الاتصال بـ MongoDB
-client = MongoClient("mongodb+srv://yasminhossam4817:wMfEBCKZH45gXZhO@cluster0.ttzaees.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+
+client = MongoClient(
+    "mongodb+srv://minasamy2624:xIgXbXONrKDzqnSP@cluster0.d4nndsf.mongodb.net/booksDB?retryWrites=true&w=majority&appName=Cluster0",
+    tlsCAFile=certifi.where()
+)
 db = client["books_scraper"]
 collection = db["books_data"]
 
 # تحميل البيانات
-data = list(collection.find())
+try:
+    data = list(collection.find())
+    st.success("✅ Connected to MongoDB Successfully!")
+except Exception as e:
+    st.error(f"❌ Connection failed: {e}")
+
 df = pd.DataFrame(data)
 
 # تنظيف الأعمدة
