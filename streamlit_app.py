@@ -7,7 +7,8 @@ import seaborn as sns
 st.set_page_config(page_title="Books Dashboard", layout="wide")
 st.title("Books to Scrape – Data Dashboard")
 
-df = pd.read_csv("cleaned_books.csv")
+url = "https://raw.githubusercontent.com/yasmin2624/streamlit_app.py/main/cleaned_books.csv"
+df = pd.read_csv(url)
 st.success("✅ Data Loaded Successfully from Local File!")
 
 
