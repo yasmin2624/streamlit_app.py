@@ -3,25 +3,24 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# إعداد الصفحة
+
 st.set_page_config(page_title="Books Dashboard", layout="wide")
 st.title("Books to Scrape – Data Dashboard")
 
-# تحميل البيانات من ملف CSV محلي
 df = pd.read_csv("C:\\Users\\Hello\\Documents\\streamlit_app\\cleaned_books.csv")  # ← غيّري الاسم حسب اسم الملف الفعلي عندك
 st.success("✅ Data Loaded Successfully from Local File!")
 
-# تنظيف الأعمدة
+
 if '_id' in df.columns:
     df.drop(columns=['_id'], inplace=True)
-df.columns = [col.lower() for col in df.columns]  # تحويل الأعمدة لـ lowercase
+df.columns = [col.lower() for col in df.columns]  
 df = df.drop_duplicates()
 
-# عرض جدول البيانات
+
 st.subheader("First 10 Records [Books]")
 st.dataframe(df.head(10))
 
-# توزيع الأسعار (رسمة هيستوجرام)
+
 if 'price' in df.columns:
     st.subheader("Price Distribution of Books")
     fig1, ax1 = plt.subplots(figsize=(10, 6))
@@ -30,7 +29,6 @@ if 'price' in df.columns:
     ax1.set_ylabel("Number of Books")
     st.pyplot(fig1)
 
-# توزيع التقييمات (رسمة بيانية دائرية)
 if 'rating' in df.columns:
     st.subheader("Number of Books by Rating")
     fig, ax = plt.subplots(figsize=(10, 6))
@@ -47,7 +45,7 @@ sns.heatmap(numeric_df.corr(), annot=True, cmap="coolwarm", fmt=".2f", linewidth
 ax.set_title("Correlation Heatmap")
 st.pyplot(fig)
 
-# Barplot: متوسط السعر حسب التقييم
+# Barplot:
 st.subheader("Average Price by Rating")
 fig, ax = plt.subplots(figsize=(10, 6))
 sns.barplot(x='rating', y='price', data=df, hue='rating', palette="Set2", ax=ax)
@@ -57,7 +55,7 @@ ax.set_ylabel("Average Price")
 plt.tight_layout()
 st.pyplot(fig)
 
-# Boxplot: توزيع الأسعار حسب التوفر
+# Boxplot: 
 st.subheader("Price Distribution Based on Book Availability")
 fig, ax = plt.subplots(figsize=(10, 6))
 sns.boxplot(x='availability', y='price', data=df, ax=ax)
@@ -77,7 +75,7 @@ if 'price' in df.columns:
 
 st.write("Price Standard Deviation:", df['price'].std())
 
-# تحويل التقييمات لأرقام
+
 rating_mapping = {'Bad': 1, 'Good': 2, 'Excellent': 3}
 df['Rating_Numeric'] = df['rating'].map(rating_mapping)
 
@@ -88,7 +86,7 @@ st.write(df["availability"].value_counts())
 st.write("Distribution of Rating:")
 st.write(df["rating"].value_counts())
 
-# متوسط السعر حسب التقييم
+
 if 'price' in df.columns and 'rating' in df.columns:
     avg_price_by_rating = df.groupby("rating")["price"].mean().sort_index()
     st.write("Average Price by Rating")
